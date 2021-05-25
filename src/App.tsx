@@ -3,9 +3,9 @@ import logo from './logo.svg';
 import './App.css';
 import Nav from './secure/components/Nav';
 import Menu from './secure/components/Menu';
-import Dashboard from './secure/Dashboard';
+import Dashboard from './secure/dashboard/Dashboard';
 import {BrowserRouter as Router, Route} from 'react-router-dom'
-import Users from './secure/Users';
+import Users from './secure/users/Users';
 import Login from './public/Login';
 import Register from './public/Register';
 function App() {
