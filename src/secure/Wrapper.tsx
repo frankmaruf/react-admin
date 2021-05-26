@@ -11,7 +11,7 @@ class Wrapper extends Component {
     }
     componentDidUpdate = async () => {
       try{
-        const response = await axios.get("user");
+        await axios.get("user");
       // console.log(response)
       }catch(e){
         this.setState(
