@@ -2,6 +2,8 @@ import axios from 'axios';
 import React, {Component} from 'react'
 import { Link } from 'react-router-dom';
 import { User } from '../../classes/user';
+import Deleter from '../components/Deleter';
+import Paginator from '../components/Paginator';
 import Wrapper from '../Wrapper'
 
 class Users extends Component {
@@ -13,23 +15,22 @@ class Users extends Component {
 
     componentDidMount = async () => {
         const response = await axios.get(`users?page=${this.page}`);
-        console.log(response)
 
         this.setState({
             users: response.data.data
         });
+
         this.last_page = response.data.meta.last_page;
     }
-    previous = async () => {
-        if(this.page===1) return;
-        this.page--;
+    handlePageChange = async (page: number) => {
+        this.page = page;
+
         await this.componentDidMount();
     }
-
-    next = async() => {
-        if(this.page===this.last_page) return;
-        this.page++;
-        await this.componentDidMount();
+    handleDelete = async (id: number) => {
+        this.setState({
+            users: this.state.users.filter((u: User) => u.id !== id)
+        })
     }
     
 
@@ -64,8 +65,8 @@ class Users extends Component {
                                         <td>{user.role.name}</td>
                                         <td>
                                             <div className="btn-group mr-2">
-                                                <a href="#" className="btn btn-sm btn-outline-secondary">Edit</a>
-                                                <a href="#" className="btn btn-sm btn-outline-secondary">Delete</a>
+                                                <Link to={`/users/${user.id}/edit`} className="btn btn-sm btn-outline-secondary">Edit</Link>
+                                                <Deleter id = {user.id} endpoint={"users"} handleDelete={this.handleDelete}/>
                                             </div>
                                         </td>
                                     </tr>
@@ -75,16 +76,7 @@ class Users extends Component {
                         </tbody>
                     </table>
                 </div>
-                <nav>
-                <ul className="pagination">
-                    <li className="page-item">
-                        <a className="page-link" onClick={this.previous}>Previous</a>
-                    </li>
-                    <li className="page-item">
-                        <a  className="page-link" onClick={this.next} >Next</a>
-                    </li>
-                </ul>
-            </nav>
+                <Paginator lastPage={this.last_page} handlePageChange={this.handlePageChange}/>
             </Wrapper>
         )
     }
