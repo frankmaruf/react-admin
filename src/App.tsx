@@ -13,6 +13,9 @@ import RoleCreate from './secure/roles/RoleCreate';
 import RoleEdit from './secure/roles/RoleEdit';
 import Products from './secure/products/Products';
 import ProductCreate from './secure/products/ProductCreate';
+import ProductEdit from './secure/products/ProductEdit';
+import Orders from './secure/orders/Orders';
+import OrderItems from './secure/orders/OrderItems';
 function App() {
   return (
     <React.Fragment>
@@ -31,6 +34,9 @@ function App() {
           <Route path={"/roles/:id/edit"} exact component={RoleEdit}/>
           <Route path={"/products"} exact component={Products}/>
           <Route path={"/products/create"} component={ProductCreate}/>
+          <Route path={"/products/:id/edit"} component={ProductEdit}/>
+          <Route path={"/orders"} exact component={Orders}/>
+          <Route path={"/orders/:id"} exact component={OrderItems}/>
       </Router>
 </div>
     </React.Fragment>
