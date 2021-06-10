@@ -1,12 +1,13 @@
 import axios from 'axios';
 import React, {Component} from 'react'
+import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { User } from '../../classes/user';
 import Deleter from '../components/Deleter';
 import Paginator from '../components/Paginator';
 import Wrapper from '../Wrapper'
 
-class Users extends Component {
+class Users extends Component<{ user: User }>  {
     state = {
         users: []
     }
@@ -32,17 +33,39 @@ class Users extends Component {
             users: this.state.users.filter((u: User) => u.id !== id)
         })
     }
+
+    actions = (id: number) => {
+        if (this.props.user.canEdit('users')) {
+            return (
+                <div className="btn-group mr-2">
+                    <Link to={`/users/${id}/edit`}
+                          className="btn btn-sm btn-outline-secondary">Edit</Link>
+                    <Deleter id={id} endpoint={'users'}
+                             handleDelete={this.handleDelete}/>
+                </div>
+            )
+        }
+    }
     
 
     render() {
-        return (
-            <Wrapper>
+        let addButton = null;
+
+        if (this.props.user.canEdit('users')) {
+            addButton = (
                 <div
                     className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                     <div className="btn-toolbar mb-2 mb-md-0">
                         <Link to={'/users/create'} className="btn btn-sm btn-outline-secondary">Add</Link>
                     </div>
                 </div>
+            );
+        }
+
+        return (
+            <Wrapper>
+                {addButton}
+
                 <div className="table-responsive">
                     <table className="table table-striped table-sm">
                         <thead>
@@ -50,7 +73,6 @@ class Users extends Component {
                             <th>#</th>
                             <th>Name</th>
                             <th>Email</th>
-                            <th>Role</th>
                             <th>Action</th>
                         </tr>
                         </thead>
@@ -62,13 +84,7 @@ class Users extends Component {
                                         <td>{user.id}</td>
                                         <td>{user.first_name} {user.last_name}</td>
                                         <td>{user.email}</td>
-                                        <td>{user.role.name}</td>
-                                        <td>
-                                            <div className="btn-group mr-2">
-                                                <Link to={`/users/${user.id}/edit`} className="btn btn-sm btn-outline-secondary">Edit</Link>
-                                                <Deleter id = {user.id} endpoint={"users"} handleDelete={this.handleDelete}/>
-                                            </div>
-                                        </td>
+                                        <td>{this.actions(user.id)}</td>
                                     </tr>
                                 )
                             }
@@ -76,6 +92,8 @@ class Users extends Component {
                         </tbody>
                     </table>
                 </div>
+
+
                 <Paginator lastPage={this.last_page} handlePageChange={this.handlePageChange}/>
             </Wrapper>
         )
@@ -83,4 +101,5 @@ class Users extends Component {
 }
 
 
-export default Users;
+// @ts-ignore
+export default connect(state => ({user: state.user}))(Users);

@@ -16,6 +16,7 @@ import ProductCreate from './secure/products/ProductCreate';
 import ProductEdit from './secure/products/ProductEdit';
 import Orders from './secure/orders/Orders';
 import OrderItems from './secure/orders/OrderItems';
+import Profile from './secure/profile/Profile';
 function App() {
   return (
     <React.Fragment>
@@ -24,6 +25,7 @@ function App() {
       <Router>
       <Route path={"/"} component={RedirectToDashboard} exact/>
           <Route path={"/dashboard"} component={Dashboard} exact/>
+          <Route path={"/profile"} component={Profile} exact/>
           <Route path={"/login"} component={Login}/>
           <Route path={"/register"} component={Register}/>
           <Route path={"/users"} exact component={Users}/>
